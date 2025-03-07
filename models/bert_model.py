@@ -10,7 +10,7 @@ from transformers.modeling_outputs import TokenClassifierOutput
 from torchvision.models import resnet50
 from torch.autograd import Variable
 
-
+# 这个类是HVPNeT论文的实现，修改了ImageModel部分，其余没有改变。
 
 class ImageModel(nn.Module):
     def __init__(self):
@@ -20,24 +20,25 @@ class ImageModel(nn.Module):
         # self.device = device
 
     def forward(self, x, att_size=7):
-        x = self.resnet.conv1(x)
-        x = self.resnet.bn1(x)
-        x = self.resnet.relu(x)
-        x = self.resnet.maxpool(x)
+        # 输入的x是一个batch的图片[batch, 3, 224, 224]
+        x = self.resnet.conv1(x) # 7*7卷积，输出[batch, 64, 112, 112]
+        x = self.resnet.bn1(x) # 批量归一化
+        x = self.resnet.relu(x) # relu激活
+        x = self.resnet.maxpool(x) # 3*3最大池化层，输出[batch, 64, 56, 56]
 
         x = self.resnet.layer1(x)
         x = self.resnet.layer2(x)
         x = self.resnet.layer3(x)
         x = self.resnet.layer4(x)
 
-        fc = x.mean(3).mean(2)
-        att = F.adaptive_avg_pool2d(x,[att_size,att_size])
+        fc = x.mean(3).mean(2) # 取平均得到全局特征[batch, 2048]
+        att = F.adaptive_avg_pool2d(x,[att_size,att_size]) # 自适应平均池化，输出[batch, 2048, 7, 7]注意力特整图
 
-        x = self.resnet.avgpool(x)
-        x = x.view(x.size(0), -1)
+        x = self.resnet.avgpool(x) # 7*7平均池化，输出[batch, 2048, 1, 1]
+        x = x.view(x.size(0), -1) # 展平的特征向量，输出[batch, 2048]
 
         # if not self.if_fine_tune:
-            
+        # 切断梯度反向传播路径，避免后续计算梯度回流到卷积层
         x= Variable(x.data)
         fc = Variable(fc.data)
         att = Variable(att.data)

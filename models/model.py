@@ -15,7 +15,7 @@ from torch.distributions import Normal
 
 
 def kld_gauss(mean_1, logsigma_1, mean_2, logsigma_2):
-        """Using std to compute KLD"""
+        """计算KL散度"""
         sigma_1 = torch.exp(0.1 + 0.9 * F.softplus(torch.clamp_max(logsigma_1, 0.4)))
         sigma_2 = torch.exp(0.1 + 0.9 * F.softplus(torch.clamp_max(logsigma_2, 0.4)))
         q_target = Normal(mean_1, sigma_1)
@@ -25,13 +25,14 @@ def kld_gauss(mean_1, logsigma_1, mean_2, logsigma_2):
 
 
 def reparameters(mean, logstd, mode):
+    """实现重参数化技巧，使梯度能够通过随机采样过程传播"""
     sigma =  torch.exp(0.5 * logstd)
     gaussian_noise = torch.randn(mean.shape).cuda(mean.device)
     # sampled_z = gaussian_noise * sigma + mean
     if mode == 'train':
-       sampled_z = gaussian_noise * sigma + mean
+       sampled_z = gaussian_noise * sigma + mean # 应用重参数化公式
     else:
-        sampled_z = mean
+        sampled_z = mean # 直接使用均值作为采样结果
     kdl_loss = -0.5 * torch.mean(1 + logstd - mean.pow(2) - logstd.exp())
     return sampled_z, kdl_loss
 
@@ -44,10 +45,11 @@ class ImageModel(nn.Module):
         # self.device = device
 
     def forward(self, x, att_size=7):
-        x = self.resnet.conv1(x)
-        x = self.resnet.bn1(x)
-        x = self.resnet.relu(x)
-        x = self.resnet.maxpool(x)
+        # 输入的x是一个batch的图片[batch, 3, 224, 224]
+        x = self.resnet.conv1(x) # 7*7卷积，输出[batch, 64, 112, 112]
+        x = self.resnet.bn1(x) # 批量归一化
+        x = self.resnet.relu(x) # relu激活
+        x = self.resnet.maxpool(x) # 3*3最大池化层，输出[batch, 64, 56, 56]
 
         x = self.resnet.layer1(x)
         x = self.resnet.layer2(x)
@@ -57,11 +59,11 @@ class ImageModel(nn.Module):
         fc = x.mean(3).mean(2)
         att = F.adaptive_avg_pool2d(x,[att_size,att_size])
 
-        x = self.resnet.avgpool(x)
-        x = x.view(x.size(0), -1)
+        x = self.resnet.avgpool(x) # 7*7平均池化，输出[batch, 2048, 1, 1]
+        x = x.view(x.size(0), -1) # 展平的特征向量，输出[batch, 2048]
 
         # if not self.if_fine_tune:
-            
+        # 切断梯度反向传播路径，避免后续计算梯度回流到卷积层
         x= Variable(x.data)
         fc = Variable(fc.data)
         att = Variable(att.data)
@@ -84,6 +86,7 @@ class HVPNeTREModel(nn.Module):
         self.tokenizer = tokenizer
         self.linear = nn.Linear(2048, self.hidden_size)
 
+        # 生成文本和图像的分布参数（均值和对数标准差）
         self.txt_encoding_mean = CrossAttention(heads=12, in_size = args.hidden_size, out_size = args.hidden_size, dropout=args.dropout)
         self.txt_encoding_logstd = CrossAttention(heads=12, in_size = args.hidden_size, out_size = args.hidden_size, dropout=args.dropout)
         self.img_encoding_mean = CrossAttention(heads=12, in_size = args.hidden_size, out_size = args.hidden_size, dropout=args.dropout)
