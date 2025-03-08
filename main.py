@@ -59,52 +59,52 @@ DATA_PROCESS = {
 DATA_PATH = {
     'MRE': {
             # text data
-            'train': '/data/RE_data/txt/ours_train.txt',    
-            'dev': '/data/RE_data/txt/ours_val.txt',
-            'test': '/data/RE_data/txt/ours_test.txt',
+            'train': 'data/RE_data/txt/ours_train.txt',    
+            'dev': 'data/RE_data/txt/ours_val.txt',
+            'test': 'data/RE_data/txt/ours_test.txt',
             # {data_id : object_crop_img_path}
-            'train_auximgs': '/data/RE_data/txt/mre_train_dict.pth',
-            'dev_auximgs': '/data/RE_data/txt/mre_dev_dict.pth',
-            'test_auximgs': '/data/RE_data/txt/mre_test_dict.pth',
+            'train_auximgs': 'data/RE_data/txt/mre_train_dict.pth',
+            'dev_auximgs': 'data/RE_data/txt/mre_dev_dict.pth',
+            'test_auximgs': 'data/RE_data/txt/mre_test_dict.pth',
             # relation json data
-            're_path': '/data/RE_data/ours_rel2id.json'
+            're_path': 'data/RE_data/ours_rel2id.json'
             },
     
     'twitter15': {
                 # text data
-                'train': '/data/NER_data/twitter2015/train.txt',
-                'dev': '/data/NER_data/twitter2015/valid.txt',
-                'test': '/data/NER_data/twitter2015/test.txt'
+                'train': 'data/NER_data/twitter2015/train.txt',
+                'dev': 'data/NER_data/twitter2015/valid.txt',
+                'test': 'data/NER_data/twitter2015/test.txt'
             },
 
     'twitter17': {
                 # text data
-                'train': '/data/NER_data/twitter2017/train.txt',
-                'dev': '/data/NER_data/twitter2017/valid.txt',
-                'test': '/data/NER_data/twitter2017/test.txt'
+                'train': 'data/NER_data/twitter2017/train.txt',
+                'dev': 'data/NER_data/twitter2017/valid.txt',
+                'test': 'data/NER_data/twitter2017/test.txt'
             },
         
 }
 
 # image data
 IMG_PATH = {
-    'MRE': {'train': '/data/RE_data/img_org/train/',
-            'dev': '/data/RE_data/img_org/val/',
-            'test': '/data/RE_data/img_org/test'},
-    'twitter15': '/data/NER_data/twitter2015_images',
-    'twitter17': '/data/NER_data/twitter2017_images',
+    'MRE': {'train': 'data/RE_data/img_org/train/',
+            'dev': 'data/RE_data/img_org/val/',
+            'test': 'data/RE_data/img_org/test'},
+    'twitter15': 'data/NER_data/twitter2015_images',
+    'twitter17': 'data/NER_data/twitter2017_images',
 }
 
 # auxiliary images
 AUX_PATH = {
     'MRE':{
-            'train': '/data/RE_data/img_vg/train/crops',
-            'dev': '/data/RE_data/img_vg/val/crops',
-            'test': '/data/RE_data/img_vg/test/crops'
+            'train': 'data/RE_data/img_vg/train/crops',
+            'dev': 'data/RE_data/img_vg/val/crops',
+            'test': 'data/RE_data/img_vg/test/crops'
     },
-    'twitter15': '/data/NER_data/twitter2015_crop_images',
+    'twitter15': 'data/NER_data/twitter2015_crop_images',
 
-    'twitter17': '/data/NER_data/twitter2017_crop_images'
+    'twitter17': 'data/NER_data/twitter2017_crop_images'
 }
 
 def set_seed(seed=2021):
@@ -118,7 +118,7 @@ def set_seed(seed=2021):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset_name', default='twitter17', type=str, help="The name of dataset.")
-    parser.add_argument('--bert_name', default='/home/cuishiyao/data/bert-base-uncased', type=str, help="Pretrained language model path")
+    parser.add_argument('--bert_name', default='/home/data4t/yangyu/data/bert-base-uncased', type=str, help="Pretrained language model path")
     parser.add_argument('--num_epochs', default=30, type=int, help="num training epochs")
     parser.add_argument('--device', default='cuda', type=str, help="cuda or cpu")
     parser.add_argument('--batch_size', default=32, type=int, help="batch size")
@@ -129,7 +129,7 @@ def main():
     parser.add_argument('--seed', default=1234, type=int, help="random seed, default is 1")
     parser.add_argument('--prompt_len', default=10, type=int, help="prompt length")
     parser.add_argument('--prompt_dim', default=800, type=int, help="mid dimension of prompt project layer")
-    parser.add_argument('--output_dir', default='/data/output_dir', type=str)
+    parser.add_argument('--output_dir', default='ckpt/re/', type=str)
     parser.add_argument('--notes', default="", type=str, help="input some remarks for making save path dir.")
     parser.add_argument('--use_prompt', action='store_true')
     parser.add_argument('--do_train', action='store_true')
@@ -142,12 +142,12 @@ def main():
     parser.add_argument('--model_name', default='test', type=str)
     parser.add_argument('--num_workers', default=4, type=int)
     parser.add_argument('--use_bias', action='store_true')
-    parser.add_argument('--m', default=4, type=int)
+    parser.add_argument('--m', default=3, type=int)
     parser.add_argument('--beta1', default=1.0, type=float)
     parser.add_argument('--beta2', default=1.0, type=float)
     parser.add_argument('--beta3', default=1.0, type=float)
     parser.add_argument('--dropout', default=0.1, type=float)
-    parser.add_argument('--fusion', default='add', type=str)
+    parser.add_argument('--fusion', default='cross', type=str)
     parser.add_argument('--reduction', default='other', type=str)
     parser.add_argument('--neg_num', default=1, type=int)
     parser.add_argument('--tune_resnet', action='store_true')

@@ -1,0 +1,9 @@
+ckpt/
+
+data/
+
+logs/
+
+__pycache__/
+
+bert-base-uncased

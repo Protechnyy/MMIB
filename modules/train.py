@@ -207,8 +207,10 @@ class RETrainer(BaseTrainer):
         
 
         re_loss, dis_loss, txt_kdl, img_kdl, logits = self.model(input_ids=input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids, labels=labels, images=images, aux_imgs=aux_imgs)
+        # 损失加权组合
         loss = re_loss + self.args.beta1 * dis_loss + self.args.beta2 * txt_kdl + self.args.beta3 * img_kdl
         # pdb.set_trace()
+        # 训练模式下，每100步打印一次损失
         if mode == 'train' and self.step % 100 == 0:
             self.logger.info("re_loss: {}, dis_loss: {}, txt_kdl: {}, img_kdl: {}".format(re_loss.item(), dis_loss.item(), txt_kdl.item(), img_kdl.item()))
         return (loss, logits), labels
@@ -217,7 +219,7 @@ class RETrainer(BaseTrainer):
     
     def before_multimodal_train(self):
 
-
+        # 选择性地冻结ResNet预训练图像编码器的参数
         if not self.args.tune_resnet:
             for name, par in self.model.named_parameters(): # freeze resnet
                 if 'image_model' in name:   par.requires_grad = False
@@ -226,9 +228,9 @@ class RETrainer(BaseTrainer):
         params1 = {'lr':self.args.lr, 'weight_decay':1e-2, 'params': []}
         params2 = {'lr':self.args.crf_lr, 'weight_decay':1e-2, 'params': []}
         for name, par in self.model.named_parameters():
-            if 'crf' in name or name == 'fc':
+            if 'crf' in name or name == 'fc': # CRF层和全连接层(fc)进入第二组，通常需要更高学习率
                 params2['params'].append(par)
-            else:
+            else: # 其他参数进入第一组
                 params1['params'].append(par)
         parameters_to_optimize.append(params1)
         parameters_to_optimize.append(params2)
