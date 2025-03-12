@@ -129,7 +129,7 @@ def main():
     parser.add_argument('--seed', default=1234, type=int, help="random seed, default is 1")
     parser.add_argument('--prompt_len', default=10, type=int, help="prompt length")
     parser.add_argument('--prompt_dim', default=800, type=int, help="mid dimension of prompt project layer")
-    parser.add_argument('--output_dir', default='ckpt/re/', type=str)
+    parser.add_argument('--output_dir', default='data/output_dir', type=str)
     parser.add_argument('--notes', default="", type=str, help="input some remarks for making save path dir.")
     parser.add_argument('--use_prompt', action='store_true')
     parser.add_argument('--do_train', action='store_true')
