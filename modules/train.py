@@ -29,9 +29,9 @@ class RETrainer(BaseTrainer):
         self.processor = processor
         self.dev_dict = processor.load_from_file(mode="dev")
         self.test_dict = processor.load_from_file(mode="test")
-        self.dev_sentences = self.test_dict['words']
+        self.dev_sentences = self.dev_dict['words']
         self.test_sentences = self.test_dict['words']
-        self.dev_imgs = self.test_dict['imgids']
+        self.dev_imgs = self.dev_dict['imgids']
         self.test_imgs = self.test_dict['imgids']
         self.re_dict = processor.get_relation_dict()
         self.id2re_dict = {iid:rel for (rel, iid) in self.re_dict.items()}       
@@ -145,7 +145,7 @@ class RETrainer(BaseTrainer):
                 if self.writer:
                     self.writer.add_scalar(tag='dev_acc', scalar_value=acc, global_step=epoch)    # tensorbordx
                     self.writer.add_scalar(tag='dev_f1', scalar_value=micro_f1, global_step=epoch)    # tensorbordx
-                    self.writer.add_scalar(tag='dev_loss', scalar_value=total_loss/len(self.test_data), global_step=epoch)    # tensorbordx
+                    self.writer.add_scalar(tag='dev_loss', scalar_value=total_loss/len(self.dev_data), global_step=epoch)    # tensorbordx
 
                 self.logger.info("Epoch {}/{}, best dev f1: {}, best epoch: {}, current dev f1 score: {}, acc: {}."\
                             .format(epoch, self.args.num_epochs, self.best_dev_metric, self.best_dev_epoch, micro_f1, acc))

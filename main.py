@@ -59,52 +59,52 @@ DATA_PROCESS = {
 DATA_PATH = {
     'MRE': {
             # text data
-            'train': 'data/RE_data/txt/ours_train.txt',    
-            'dev': 'data/RE_data/txt/ours_val.txt',
-            'test': 'data/RE_data/txt/ours_test.txt',
+            'train': '/home/data4t/yangyu/data/RE_data/txt/ours_train.txt',    
+            'dev': '/home/data4t/yangyu/data/RE_data/txt/ours_val.txt',
+            'test': '/home/data4t/yangyu/data/RE_data/txt/ours_test.txt',
             # {data_id : object_crop_img_path}
-            'train_auximgs': 'data/RE_data/txt/mre_train_dict.pth',
-            'dev_auximgs': 'data/RE_data/txt/mre_dev_dict.pth',
-            'test_auximgs': 'data/RE_data/txt/mre_test_dict.pth',
+            'train_auximgs': '/home/data4t/yangyu/data/RE_data/txt/mre_train_dict.pth',
+            'dev_auximgs': '/home/data4t/yangyu/data/RE_data/txt/mre_dev_dict.pth',
+            'test_auximgs': '/home/data4t/yangyu/data/RE_data/txt/mre_test_dict.pth',
             # relation json data
-            're_path': 'data/RE_data/ours_rel2id.json'
+            're_path': '/home/data4t/yangyu/data/RE_data/ours_rel2id.json'
             },
     
     'twitter15': {
                 # text data
-                'train': 'data/NER_data/twitter2015/train.txt',
-                'dev': 'data/NER_data/twitter2015/valid.txt',
-                'test': 'data/NER_data/twitter2015/test.txt'
+                'train': '/home/data4t/yangyu/data/NER_data/twitter2015/train.txt',
+                'dev': '/home/data4t/yangyu/data/NER_data/twitter2015/valid.txt',
+                'test': '/home/data4t/yangyu/data/NER_data/twitter2015/test.txt'
             },
 
     'twitter17': {
                 # text data
-                'train': 'data/NER_data/twitter2017/train.txt',
-                'dev': 'data/NER_data/twitter2017/valid.txt',
-                'test': 'data/NER_data/twitter2017/test.txt'
+                'train': '/home/data4t/yangyu/data/NER_data/twitter2017/train.txt',
+                'dev': '/home/data4t/yangyu/data/NER_data/twitter2017/valid.txt',
+                'test': '/home/data4t/yangyu/data/NER_data/twitter2017/test.txt'
             },
         
 }
 
 # image data
 IMG_PATH = {
-    'MRE': {'train': 'data/RE_data/img_org/train/',
-            'dev': 'data/RE_data/img_org/val/',
-            'test': 'data/RE_data/img_org/test'},
-    'twitter15': 'data/NER_data/twitter2015_images',
-    'twitter17': 'data/NER_data/twitter2017_images',
+    'MRE': {'train': '/home/data4t/yangyu/data/RE_data/img_org/train/',
+            'dev': '/home/data4t/yangyu/data/RE_data/img_org/val/',
+            'test': '/home/data4t/yangyu/data/RE_data/img_org/test'},
+    'twitter15': '/home/data4t/yangyu/data/NER_data/twitter2015_images',
+    'twitter17': '/home/data4t/yangyu/data/NER_data/twitter2017_images',
 }
 
 # auxiliary images
 AUX_PATH = {
     'MRE':{
-            'train': 'data/RE_data/img_vg/train/crops',
-            'dev': 'data/RE_data/img_vg/val/crops',
-            'test': 'data/RE_data/img_vg/test/crops'
+            'train': '/home/data4t/yangyu/data/RE_data/img_vg/train/crops',
+            'dev': '/home/data4t/yangyu/data/RE_data/img_vg/val/crops',
+            'test': '/home/data4t/yangyu/data/RE_data/img_vg/test/crops'
     },
-    'twitter15': 'data/NER_data/twitter2015_crop_images',
+    'twitter15': '/home/data4t/yangyu/data/NER_data/twitter2015_crop_images',
 
-    'twitter17': 'data/NER_data/twitter2017_crop_images'
+    'twitter17': '/home/data4t/yangyu/data/NER_data/twitter2017_crop_images'
 }
 
 def set_seed(seed=2021):
