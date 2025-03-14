@@ -127,8 +127,6 @@ def main():
     parser.add_argument('--warmup_ratio', default=0.01, type=float)
     parser.add_argument('--eval_begin_epoch', default=1, type=int, help="epoch to start evluate")
     parser.add_argument('--seed', default=1234, type=int, help="random seed, default is 1")
-    parser.add_argument('--prompt_len', default=10, type=int, help="prompt length")
-    parser.add_argument('--prompt_dim', default=800, type=int, help="mid dimension of prompt project layer")
     parser.add_argument('--output_dir', default='data/output_dir', type=str)
     parser.add_argument('--notes', default="", type=str, help="input some remarks for making save path dir.")
     parser.add_argument('--use_prompt', action='store_true')
